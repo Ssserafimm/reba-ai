@@ -60,6 +60,28 @@ const t = {
   }
 };
 
+// Add this stepsText object for both languages
+const stepsText = {
+  en: [
+    "Define specific actions to achieve the goal",
+    "Break the goal into weekly tasks",
+    "Find support or resources for achieving the goal",
+    "Create an action plan for the first week",
+    "Start executing the planned actions",
+    "Conduct the first progress review",
+    "Adjust the plan if necessary"
+  ],
+  ru: [
+    "Определить конкретные действия для достижения цели",
+    "Разбить цель на еженедельные задачи",
+    "Найти поддержку или ресурсы для достижения цели",
+    "Создать план действий на первую неделю",
+    "Начать выполнение запланированных действий",
+    "Провести первую оценку прогресса",
+    "Скорректировать план при необходимости"
+  ]
+};
+
 export default function GoalSetting() {
   const { state, dispatch } = useApp();
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -78,15 +100,10 @@ export default function GoalSetting() {
 
     // Generate SMART goal steps
     const generateSteps = (title: string, category: string): GoalStep[] => {
-      const baseSteps = [
-        { description: 'Определить конкретные действия для достижения цели', dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000) },
-        { description: 'Разбить цель на еженедельные задачи', dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000) },
-        { description: 'Найти поддержку или ресурсы для достижения цели', dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000) },
-        { description: 'Создать план действий на первую неделю', dueDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000) },
-        { description: 'Начать выполнение запланированных действий', dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },
-        { description: 'Провести первую оценку прогресса', dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000) },
-        { description: 'Скорректировать план при необходимости', dueDate: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000) }
-      ];
+      const baseSteps = stepsText[state.language].map((description, idx) => ({
+        description,
+        dueDate: new Date(Date.now() + [1,2,3,4,7,14,21][idx] * 24 * 60 * 60 * 1000)
+      }));
 
       return baseSteps.map(step => ({
         id: crypto.randomUUID(),
