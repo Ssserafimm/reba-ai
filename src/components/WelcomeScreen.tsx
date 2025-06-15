@@ -5,6 +5,27 @@ import { User } from '../types';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../firebase';
 
+const stepsText = {
+  en: [
+    "Define specific actions to achieve the goal",
+    "Break the goal into weekly tasks",
+    "Find support or resources for achieving the goal",
+    "Create an action plan for the first week",
+    "Start executing the planned actions",
+    "Conduct the first progress review",
+    "Adjust the plan if necessary"
+  ],
+  ru: [
+    "Определить конкретные действия для достижения цели",
+    "Разбить цель на еженедельные задачи",
+    "Найти поддержку или ресурсы для достижения цели",
+    "Создать план действий на первую неделю",
+    "Начать выполнение запланированных действий",
+    "Провести первую оценку прогресса",
+    "Скорректировать план при необходимости"
+  ]
+};
+
 export default function WelcomeScreen() {
   const { state, dispatch } = useApp();
   const language = state.language;
@@ -67,6 +88,20 @@ export default function WelcomeScreen() {
     } catch (error) {
       alert(tr.errorGoogle);
     }
+  };
+
+  const generateSteps = (title: string, category: string): GoalStep[] => {
+    const baseSteps = stepsText[state.language].map((description, idx) => ({
+      description,
+      dueDate: new Date(Date.now() + [1,2,3,4,7,14,21][idx] * 24 * 60 * 60 * 1000)
+    }));
+
+    return baseSteps.map(step => ({
+      id: crypto.randomUUID(),
+      description: step.description,
+      completed: false,
+      dueDate: step.dueDate
+    }));
   };
 
   return (

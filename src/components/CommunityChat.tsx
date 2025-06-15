@@ -137,106 +137,111 @@ export default function CommunityChat() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="bg-white rounded-lg shadow-sm">
-        <div className="border-b border-gray-200 p-6">
-          <div className="flex items-center">
-            <Users className="w-8 h-8 text-purple-600 mr-3" />
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900">{tr.title}</h2>
-              <p className="text-gray-600">{tr.subtitle}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 m-6">
-          <div className="flex">
-            <Shield className="w-5 h-5 text-yellow-400 mr-3 mt-0.5" />
-            <div>
-              <h3 className="text-sm font-medium text-yellow-800">{tr.rulesTitle}</h3>
-              <div className="mt-2 text-sm text-yellow-700">
-                <ul className="list-disc list-inside space-y-1">
-                  {tr.rules.map((rule, index) => (
-                    <li key={index}>{rule}</li>
-                  ))}
-                </ul>
+    <div className="max-w-6xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Community Chat Section */}
+        <div className="md:col-span-2">
+          <div className="bg-white rounded-lg shadow-sm">
+            <div className="border-b border-gray-200 p-6">
+              <div className="flex items-center">
+                <Users className="w-8 h-8 text-purple-600 mr-3" />
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">{tr.title}</h2>
+                  <p className="text-gray-600">{tr.subtitle}</p>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div className="h-96 overflow-y-auto p-6 space-y-4">
-          {state.communityMessages.map((msg) => (
-            <div key={msg.id} className={`border-l-4 p-4 rounded-lg ${getMessageColor(msg.emotionalTone!)}`}>
-              <div className="flex items-start justify-between mb-2">
-                <div className="flex items-center space-x-2">
-                  <span className="font-medium text-gray-900">
-                    {msg.userName === tr.aiModerator ? (
-                      <div className="flex items-center">
-                        <Shield className="w-4 h-4 mr-1 text-blue-600" />
-                        {tr.aiModerator}
-                      </div>
-                    ) : (
-                      msg.userName
-                    )}
-                  </span>
-                  {msg.userId === state.currentUser?.id && (
-                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">{tr.you}</span>
+            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 m-6">
+              <div className="flex">
+                <Shield className="w-5 h-5 text-yellow-400 mr-3 mt-0.5" />
+                <div>
+                  <h3 className="text-sm font-medium text-yellow-800">{tr.rulesTitle}</h3>
+                  <div className="mt-2 text-sm text-yellow-700">
+                    <ul className="list-disc list-inside space-y-1">
+                      {tr.rules.map((rule, index) => (
+                        <li key={index}>{rule}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="h-96 overflow-y-auto p-6 space-y-4">
+              {state.communityMessages.map((msg) => (
+                <div key={msg.id} className={`border-l-4 p-4 rounded-lg ${getMessageColor(msg.emotionalTone!)}`}>
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-center space-x-2">
+                      <span className="font-medium text-gray-900">
+                        {msg.userName === tr.aiModerator ? (
+                          <div className="flex items-center">
+                            <Shield className="w-4 h-4 mr-1 text-blue-600" />
+                            {tr.aiModerator}
+                          </div>
+                        ) : (
+                          msg.userName
+                        )}
+                      </span>
+                      {msg.userId === state.currentUser?.id && (
+                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">{tr.you}</span>
+                      )}
+                    </div>
+                    <span className="text-xs text-gray-500">
+                      {msg.timestamp.toLocaleTimeString()}
+                    </span>
+                  </div>
+                  <p className="text-gray-800">{msg.content}</p>
+                  {msg.emotionalTone === 'positive' && (
+                    <div className="flex items-center mt-2 text-green-600">
+                      <Heart className="w-4 h-4 mr-1" />
+                      <span className="text-xs">{tr.positiveMsg}</span>
+                    </div>
                   )}
                 </div>
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
+
+            <div className="border-t border-gray-200 p-6">
+              <form onSubmit={handleSubmit} className="flex space-x-4">
+                <input
+                  type="text"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
+                  placeholder={tr.inputPlaceholder}
+                  maxLength={500}
+                />
+                <button
+                  type="submit"
+                  disabled={!message.trim()}
+                  className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </form>
+              <div className="flex items-center mt-3">
+                <input
+                  type="checkbox"
+                  id="anonymous-toggle"
+                  checked={postAnonymous}
+                  onChange={e => setPostAnonymous(e.target.checked)}
+                  className="accent-purple-600 w-4 h-4 rounded mr-2"
+                />
+                <label htmlFor="anonymous-toggle" className="text-sm text-gray-700 cursor-pointer select-none">
+                  {state.language === 'ru' ? 'Писать как Аноним' : 'Post as Anonymous'}
+                </label>
+              </div>
+              <div className="flex items-center justify-between mt-2">
                 <span className="text-xs text-gray-500">
-                  {msg.timestamp.toLocaleTimeString()}
+                  {message.length}/{tr.charCount}
+                </span>
+                <span className="text-xs text-gray-500">
+                  {tr.moderationNotice}
                 </span>
               </div>
-              <p className="text-gray-800">{msg.content}</p>
-              {msg.emotionalTone === 'positive' && (
-                <div className="flex items-center mt-2 text-green-600">
-                  <Heart className="w-4 h-4 mr-1" />
-                  <span className="text-xs">{tr.positiveMsg}</span>
-                </div>
-              )}
             </div>
-          ))}
-          <div ref={messagesEndRef} />
-        </div>
-
-        <div className="border-t border-gray-200 p-6">
-          <form onSubmit={handleSubmit} className="flex space-x-4">
-            <input
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
-              placeholder={tr.inputPlaceholder}
-              maxLength={500}
-            />
-            <button
-              type="submit"
-              disabled={!message.trim()}
-              className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
-            >
-              <Send className="w-4 h-4" />
-            </button>
-          </form>
-          <div className="flex items-center mt-3">
-            <input
-              type="checkbox"
-              id="anonymous-toggle"
-              checked={postAnonymous}
-              onChange={e => setPostAnonymous(e.target.checked)}
-              className="accent-purple-600 w-4 h-4 rounded mr-2"
-            />
-            <label htmlFor="anonymous-toggle" className="text-sm text-gray-700 cursor-pointer select-none">
-              {state.language === 'ru' ? 'Писать как Аноним' : 'Post as Anonymous'}
-            </label>
-          </div>
-          <div className="flex items-center justify-between mt-2">
-            <span className="text-xs text-gray-500">
-              {message.length}/{tr.charCount}
-            </span>
-            <span className="text-xs text-gray-500">
-              {tr.moderationNotice}
-            </span>
           </div>
         </div>
       </div>

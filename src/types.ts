@@ -50,7 +50,7 @@ export interface ChatMessage {
 export interface Lesson {
   id: string;
   title: string;
-  category: 'mindfulness' | 'time-management' | 'finances' | 'relationships' | 'health';
+  category: 'mindfulness' | 'time-management' | 'finances' | 'relationships' | 'health' | 'motivation' | 'selfcare';
   content: string;
   duration: number; // minutes
   completed: boolean;
