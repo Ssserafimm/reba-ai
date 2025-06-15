@@ -10,7 +10,7 @@ import EmergencyHelp from './EmergencyHelp';
 import { Heart, Target, BarChart3, Users, BookOpen, AlertTriangle } from 'lucide-react';
 
 export default function Dashboard() {
-  const { state } = useApp();
+  const { state, dispatch } = useApp();
   const language = state.language;
   const t = {
     en: {
@@ -93,7 +93,7 @@ export default function Dashboard() {
 }
 
 function DashboardOverview() {
-  const { state } = useApp();
+  const { state, dispatch } = useApp();
   const { currentUser } = state;
   const language = state.language;
   const t = {
@@ -192,7 +192,11 @@ function DashboardOverview() {
           ) : (
             <div className="space-y-3">
               {currentUser?.goals.slice(0, 3).map((goal) => (
-                <div key={goal.id} className="flex items-center p-3 border border-gray-200 rounded-lg">
+                <div
+                  key={goal.id}
+                  className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition"
+                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'goals' })}
+                >
                   <div className="flex-1">
                     <h4 className="font-medium text-gray-900">{goal.title}</h4>
                     <p className="text-sm text-gray-500">{goal.description}</p>
