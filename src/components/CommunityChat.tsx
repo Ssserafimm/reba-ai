@@ -57,6 +57,7 @@ const t = {
 export default function CommunityChat() {
   const { state, dispatch } = useApp();
   const [message, setMessage] = useState('');
+  const [postAnonymous, setPostAnonymous] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const tr = t[state.language];
@@ -99,7 +100,7 @@ export default function CommunityChat() {
       emotionalTone: 'neutral',
       timestamp: new Date(),
       userId: state.currentUser?.id,
-      userName: state.currentUser?.name
+      userName: postAnonymous ? (state.language === 'ru' ? 'Аноним' : 'Anonymous') : (state.currentUser?.name)
     };
 
     dispatch({ type: 'ADD_COMMUNITY_MESSAGE', payload: newMessage });
@@ -110,7 +111,7 @@ export default function CommunityChat() {
       setTimeout(() => {
         const aiResponse: ChatMessage = {
           id: crypto.randomUUID(),
-          content: tr.aiSupport(state.currentUser?.name || ""),
+          content: tr.aiSupport(postAnonymous ? (state.language === 'ru' ? 'Аноним' : 'Anonymous') : (state.currentUser?.name) || ""),
           type: 'community',
           emotionalTone: 'positive',
           timestamp: new Date(),
@@ -217,6 +218,18 @@ export default function CommunityChat() {
               <Send className="w-4 h-4" />
             </button>
           </form>
+          <div className="flex items-center mt-3">
+            <input
+              type="checkbox"
+              id="anonymous-toggle"
+              checked={postAnonymous}
+              onChange={e => setPostAnonymous(e.target.checked)}
+              className="accent-purple-600 w-4 h-4 rounded mr-2"
+            />
+            <label htmlFor="anonymous-toggle" className="text-sm text-gray-700 cursor-pointer select-none">
+              {state.language === 'ru' ? 'Писать как Аноним' : 'Post as Anonymous'}
+            </label>
+          </div>
           <div className="flex items-center justify-between mt-2">
             <span className="text-xs text-gray-500">
               {message.length}/{tr.charCount}
