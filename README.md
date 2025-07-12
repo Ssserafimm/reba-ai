@@ -5,7 +5,7 @@ Reba AI is a mental health support application designed to help users on their r
 [Live Prototype](https://reba-ai.netlify.app)  
 _Note: This is still a prototype and under active development._
 
-## 👥 User Roles
+##  User Roles
 
 Reba AI supports multiple user types for a more personalized experience:
 
@@ -22,7 +22,7 @@ Reba AI supports multiple user types for a more personalized experience:
 
 > **Note:** The app can be extended to provide different dashboards or features based on the user type (client or doctor). User type is set during authentication and managed in the app’s context.
 
-## 🚀 Features
+##  Features
 
 - **Emotion Tracker:** Log and visualize your daily mood and wellbeing.
 - **Goal Setting:** Create and manage SMART goals with step-by-step action plans.
